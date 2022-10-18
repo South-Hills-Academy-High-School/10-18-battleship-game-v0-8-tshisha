@@ -5,6 +5,7 @@ namespace SpriteKind {
     export const Boat2 = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    rotateFlag = "nothing"
     grid.move(cursor, 0, -1)
     grid.place(shadowCursor, tiles.getTileLocation(grid.spriteCol(cursor), grid.spriteRow(cursor) + 1))
 })
@@ -27,20 +28,31 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+    rotateFlag = "nothing"
     grid.move(cursor, -1, 1)
     grid.place(shadowCursor, tiles.getTileLocation(grid.spriteRow(cursor) + 1, grid.spriteCol(cursor)))
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    rotateFlag = "nothing"
     grid.move(cursor, -1, 1)
     grid.place(shadowCursor, tiles.getTileLocation(grid.spriteRow(cursor) + -1, grid.spriteCol(cursor)))
 })
 function moveBoat (boatArray: any[]) {
+    let overlapFlag = ""
     makeBoatVisible(boatArray)
     if (grid.spriteRow(cursor) >= 8 - boatArray.length && boatRotateArray[currentBoat] == "up") {
-        grid.move(cursor, 0, -1)
+        if (rotateFlag == "nothing") {
+            boatRotateArray[currentBoat] = overlapFlag
+        } else {
+            grid.move(cursor, 0, -1)
+        }
     }
     if (grid.spriteCol(cursor) >= 11 - boatArray.length && boatRotateArray[currentBoat] == "sideways") {
-        grid.move(cursor, -1, 0)
+        if (rotateFlag == "nothing") {
+            boatRotateArray[currentBoat] = overlapFlag
+        } else {
+            grid.move(cursor, -1, 0)
+        }
     }
     cursor.setFlag(SpriteFlag.Invisible, true)
     iterator = 0
@@ -54,6 +66,7 @@ function moveBoat (boatArray: any[]) {
     }
 }
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    rotateFlag = "nothing"
     grid.move(cursor, 0, 1)
     grid.place(shadowCursor, tiles.getTileLocation(grid.spriteCol(cursor), grid.spriteRow(cursor) + -1))
 })
